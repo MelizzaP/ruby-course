@@ -1,13 +1,14 @@
 
 class Book
   attr_reader :author, :title
-  attr_accessor :status, :id
+  attr_accessor :status, :id, :borrower
   
   def initialize(title, author)
     @title = title
     @author = author
     @id = nil
     @status = 'available'
+    @borrower = nil
   end
   
 # This function will return false if the book 
@@ -51,11 +52,17 @@ class Library
   end
 
   def check_out_book(book_id, borrower)
-    selected_book = @books.select {|book| book.id == book_id}
-    selected_book[0].check_out
-    selected_book[0]
+    selected_book = @books.find {|book| book.id == book_id}
+    selected_book.check_out
+    selected_book.borrower = borrower
+    selected_book
   end
-
+  
+  def get_borrower(book_id)
+    selected_book = @books.find {|book| book.id == book_id}
+    selected_book.borrower.name
+  end
+  
   def check_in_book(book)
   end
 
