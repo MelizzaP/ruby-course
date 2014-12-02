@@ -25,7 +25,7 @@ describe Book do
   end
 
   it "can't be checked out twice in a row" do
-    book = Book.new("The Stranger","Albert Camus")
+    book = Book.new("1984","George Orwell")
     did_it_work = book.check_out
     expect(did_it_work).to eq(true)
 

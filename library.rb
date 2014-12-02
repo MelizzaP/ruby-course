@@ -10,8 +10,15 @@ class Book
     @status = 'available'
   end
   
+# This function will return false if the book 
+#   is already checked out, true if available
   def check_out 
-    @status = 'checked_out'
+    if status == 'available'
+      @status = 'checked_out'
+      true
+    else 
+      false 
+    end   
   end
   
 end
