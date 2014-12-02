@@ -129,8 +129,8 @@ describe Library do
   end
 
   it "allows a Borrower to check a book back in" do
-    lib = Library.new
-    lib.register_new_book("Finnegans Wake", "James Joyce")
+    lib = Library.new("My Library")
+    lib.add_book("Finnegans Wake", "James Joyce")
     book_id = lib.books.first.id
 
     # Bob wants to check out Finnegans Wake

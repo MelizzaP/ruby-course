@@ -65,6 +65,8 @@ class Library
   end
   
   def check_in_book(book)
+    selected_book = @books.find {|books| books == book}
+    selected_book.check_in 
   end
 
   def available_books
