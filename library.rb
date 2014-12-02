@@ -53,9 +53,10 @@ class Library
 
   def check_out_book(book_id, borrower)
     selected_book = @books.find {|book| book.id == book_id}
-    selected_book.check_out
-    selected_book.borrower = borrower
-    selected_book
+    if selected_book.check_out
+      selected_book.borrower = borrower
+      selected_book
+    end
   end
   
   def get_borrower(book_id)

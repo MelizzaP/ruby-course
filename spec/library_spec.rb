@@ -108,8 +108,8 @@ describe Library do
   end
 
   it "does not allow a book to be checked out twice in a row" do
-    lib = Library.new
-    lib.register_new_book = Book.new("Surely You're Joking Mr. Feynman", "Richard Feynman")
+    lib = Library.new("My Library")
+    lib.add_book("Surely You're Joking Mr. Feynman", "Richard Feynman")
     book_id = lib.books.first.id
 
     # Leslie Nielsen wants to double check on that
@@ -128,7 +128,7 @@ describe Library do
     expect(book_again).to be_nil
   end
 
-  xit "allows a Borrower to check a book back in" do
+  it "allows a Borrower to check a book back in" do
     lib = Library.new
     lib.register_new_book("Finnegans Wake", "James Joyce")
     book_id = lib.books.first.id
