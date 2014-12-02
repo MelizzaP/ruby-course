@@ -1,7 +1,7 @@
 
 class Book
-  attr_reader :author, :title, :id
-  attr_accessor :status
+  attr_reader :author, :title
+  attr_accessor :status, :id
   
   def initialize(title, author)
     @title = title
@@ -36,14 +36,18 @@ class Borrower
 end
 
 class Library
+  attr_reader :books, :counts
+  
   def initialize(name)
     @books = []
-  end
-
-  def books
+    @counts = 0
   end
 
   def add_book(title, author)
+    title = Book.new(title,author)
+    title.id = count 
+    @books << title
+    @counts +=1
   end
 
   def check_out_book(book_id, borrower)
