@@ -15,5 +15,7 @@ class Cat < ActiveRecord::Base
 end
 
 class Shop < ActiveRecord::Base
-  
+  has_many :users
+  has_many :dogs
+  has_many :cats
 end
