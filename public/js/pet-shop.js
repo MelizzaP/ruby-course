@@ -49,7 +49,7 @@
 
       return m('.pet', [
         m('.photo',
-          m('img', { src: pet.imageUrl })
+          m('img', { src: pet.image_url })
         ),
         m('.info', [
           m('h4', pet.name),
