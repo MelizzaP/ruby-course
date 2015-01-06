@@ -17,14 +17,20 @@ end
 get '/' do
   if session[:user_id]
     # TODO: Grab user from database
+
+    ##### I think we can comment this out #####
     Petshops::UserRepo.find_by_id(mydb, session[:user_id])
+    ###########################################
+
   end
   erb :index
 end
 
+##### I think we can comment this out #####
 def mydb
   Petshops.create_db_connection('petserver')
 end
+###########################################
 
 # #
 # ...the rest are JSON endpoints
@@ -33,6 +39,11 @@ get '/shops' do
 
   headers['Content-Type'] = 'application/json'
   # RestClient.get("http://pet-shop.api.mks.io/shops")
+
+  #####  Active Record Change #####
+  # shops = Shop.all
+  # shops.as_json
+
   JSON.generate(Petshops::ShopRepo.all(mydb))
 end
 
@@ -41,6 +52,11 @@ post '/signin' do
 
   username = params['username']
   password = params['password']
+
+  #####  Active Record Change #####
+  # users = User.all
+  # creds = users.find_by(name: username)
+
   creds = Petshops::UserRepo.find_by_name(mydb, username)
 
   # TODO: Grab user by username from database and check password
@@ -53,14 +69,24 @@ post '/signin' do
     session[:user_id] = creds['id']
 
     
+    #####  Active Record Change #####
+    # cats = Cat.all
+    # cats = cats.find_by(owner_id: session[:user_id])
 
     cats = Petshops::CatRepo.find_by_owner_id(mydb, session[:user_id])
+
     creds['cats'] = []
+
     cats.each do |cat|
       creds['cats'] << {shopid: cat['shopId'], name: cat['name'], imageUrl: cat['imageUrl'], adopted: true, id: cat['id']}
     end
-    
+
+    #####  Active Record Change #####
+    # dogs = Dog.all
+    # dogs = dogs.find_by(owner_id: session[:user_id])
+
     dogs = Petshops::DogRepo.find_by_owner_id(mydb, session[:user_id])
+
     creds['dogs'] = []
     dogs.each do |dog|
       creds['dogs'] << {shopid: dog['shopId'], name: dog['name'], imageUrl: dog['imageUrl'], adopted: true, id: dog['id']}
@@ -72,6 +98,17 @@ post '/signin' do
   end
 end
 
+
+#####  Extras #####
+get '/signup' do
+  erb :signup
+end
+
+post '/signup' do
+end
+
+###################
+
  # # # #
 # Cats #
 # # # #
@@ -80,11 +117,19 @@ get '/shops/:id/cats' do
   id = params[:id]
   # TODO: Grab from database instead
   # RestClient.get("http://pet-shop.api.mks.io/shops/#{id}/cats")
+
+  #####  Active Record Change #####
+  # cats = Cat.all
+  # data = cats.find_by(shop_id: id)
+
   data = Petshops::CatRepo.find_by_shop_id(mydb, id)
   data.each do |line|
     line['adopted'] = (line['adopted'] == 't' ? true : false)
   end
   JSON.generate(data)
+
+  #####  Active Record Change #####
+  # data.as_json
 end
 
 put '/shops/:shop_id/cats/:id/adopt' do
@@ -96,11 +141,22 @@ put '/shops/:shop_id/cats/:id/adopt' do
   # RestClient.put("http://pet-shop.api.mks.io/shops/#{shop_id}/cats/#{id}",
   #   { adopted: true }, :content_type => 'application/json')
   # TODO (after you create users table): Attach new cat to logged in user
+
+  #####  Active Record Change #####
+  # cats = Cat.all
+  # cat = cats.find_by( id: id )
+  # cat.shop_id = shop_id
+  # cat.owner_id = owner_id
+  # save = cat.save
+
   JSON.generate(Petshops::CatRepo.save(mydb, {
       'id' => id,
       'shop_id' => shop_id,
       'owner_id' => owner_id
     }))
+
+  #####  Active Record Change #####
+  # save.as_json
 end
 
 
@@ -112,6 +168,11 @@ get '/shops/:id/dogs' do
   id = params[:id]
   # TODO: Update database instead
   # RestClient.get("http://pet-shop.api.mks.io/shops/#{id}/dogs")
+
+  #####  Active Record Change #####
+  # dogs = Dog.all
+  # data = dogs.find_by(shop_id: id)
+
   data = Petshops::DogRepo.find_by_shop_id(mydb, id)
   
   data.each do |line|
@@ -119,6 +180,9 @@ get '/shops/:id/dogs' do
   end
 
   JSON.generate(data)
+
+  #####  Active Record Change #####
+  # data.as_json
 end
 
 put '/shops/:shop_id/dogs/:id/adopt' do
@@ -130,11 +194,22 @@ put '/shops/:shop_id/dogs/:id/adopt' do
   # RestClient.put("http://pet-shop.api.mks.io/shops/#{shop_id}/dogs/#{id}",
   #   { adopted: true }, :content_type => 'application/json')
   # TODO (after you create users table): Attach new dog to logged in user
+
+  #####  Active Record Change #####
+  # dogs = Dog.all
+  # dog = dogs.find_by( id: id)
+  # dog.shop_id = shop_id
+  # dog.owner_id = owner_id
+  # save = dog.save
+
   JSON.generate(Petshops::DogRepo.save(mydb, {
       'id' => id,
       'shop_id' => shop_id,
       'owner_id' => owner_id
     }))
+
+  #####  Active Record Change #####
+  # save.as_json
 end
 
 
