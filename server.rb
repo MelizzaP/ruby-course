@@ -3,6 +3,7 @@ require 'sinatra/reloader'
 require 'rest-client'
 require 'json'
 require './lib/petshop.rb'
+require './config/environments.rb'
 
 # #
 # This is our only html view...
