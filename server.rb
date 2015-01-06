@@ -22,7 +22,7 @@ get '/' do
     #####  Active Record Change #####
     User.connection
     users = User.all
-    users.find_by(id: session[:user_id])
+    users.find_by(id: session[:user_id]).as_json
 
     # Petshops::UserRepo.find_by_id(mydb, session[:user_id])
 
@@ -31,9 +31,9 @@ get '/' do
 end
 
 ##### I think we can comment this out #####
-def mydb
-  Petshops.create_db_connection('petserver')
-end
+# def mydb
+#   Petshops.create_db_connection('petserver')
+# end
 ###########################################
 
 # #
@@ -61,7 +61,7 @@ post '/signin' do
   #####  Active Record Change #####
   User.connection
   users = User.all
-  creds = users.find_by(name: username)
+  creds = users.find_by(username: username).as_json
 
   # creds = Petshops::UserRepo.find_by_name(mydb, username)
 
@@ -78,26 +78,26 @@ post '/signin' do
     #####  Active Record Change #####
     Cat.connection
     cats = Cat.all
-    cats = cats.find_by(owner_id: session[:user_id]).as_json
+    cats = cats.where("owner_id = #{session[:user_id]}").as_json
 
     # cats = Petshops::CatRepo.find_by_owner_id(mydb, session[:user_id])
 
     creds['cats'] = []
 
     cats.each do |cat|
-      creds['cats'] << {shopid: cat['shopId'], name: cat['name'], imageUrl: cat['imageUrl'], adopted: true, id: cat['id']}
+      creds['cats'] << {shopid: cat['shop_id'], name: cat['name'], imageUrl: cat['image_url'], adopted: true, id: cat['id']}
     end
 
     #####  Active Record Change #####
     Dog.connection
     dogs = Dog.all
-    dogs = dogs.find_by(owner_id: session[:user_id]).as_json
+    dogs = dogs.where("owner_id = #{session[:user_id]}").as_json
 
     # dogs = Petshops::DogRepo.find_by_owner_id(mydb, session[:user_id])
 
     creds['dogs'] = []
     dogs.each do |dog|
-      creds['dogs'] << {shopid: dog['shopId'], name: dog['name'], imageUrl: dog['imageUrl'], adopted: true, id: dog['id']}
+      creds['dogs'] << {shopid: dog['shop_id'], name: dog['name'], imageUrl: dog['image_url'], adopted: true, id: dog['id']}
     end
 
     JSON.generate(creds)
