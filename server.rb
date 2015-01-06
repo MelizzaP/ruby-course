@@ -18,9 +18,11 @@ get '/' do
   if session[:user_id]
     # TODO: Grab user from database
 
-    ##### I think we can comment this out #####
+    #####  Active Record Change #####
+    # users = User.all
+    # users.find_by(id: session[:user_id])
+    
     Petshops::UserRepo.find_by_id(mydb, session[:user_id])
-    ###########################################
 
   end
   erb :index
