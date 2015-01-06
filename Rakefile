@@ -4,7 +4,7 @@ require_relative 'server.rb'
 ActiveRecordTasks.configure do |config|
   config.db_dir = 'db'
   config.db_config_path = 'db/config.yml'
-  config.env = 'dev'
+  config.env = 'development'
 end
 
 ActiveRecordTasks.load_tasks
